@@ -255,6 +255,8 @@ public class CachedPageDataAccessor implements PageDataAccessor {
 			pageDataChunk.setLastPageNumber(lastpage);
 
 		}
+		
+		System.out.println("The page data chunk is:" + pageDataChunk);
 
 		cacheStore.put(paginationId + CACHE_DATA_SUFFIX, pageDataChunk);
 		return pageDataChunk;

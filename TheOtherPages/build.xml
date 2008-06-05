@@ -1,0 +1,35 @@
+<project name="TheOtherPages" default="all" basedir=".">
+	<property name="theotherpages.root" value="${basedir}"/>
+	<property name="project.dist.dir" value="${theotherpages.root}/dist" />
+	<property name="project.classes.dir" value="${theotherpages.root}/bin" />
+	<property name="project.src.dir" value="${theotherpages.root}/src" />
+	<property name="jar-file" value="theotherpages.jar" />
+
+	<target name="all" depends="createFrameworkJar" />
+	<path id="project.class.path">
+		<fileset dir="${theotherpages.root}/lib">
+			<include name="commons-lang-2.0.jar"/>
+			<include name="servlet-api.jar"/>
+			<include name="standard.jar"/>
+		</fileset>
+	</path>
+
+	<target name="createFrameworkJar" depends="clean,init">
+		<echo message="============ B U I L D I N G   C L A S S E S   N O W . . . . . . . . . . . . . ============" />
+		<javac destdir="${project.classes.dir}" classpathref="project.class.path" debug="on" deprecation="on" optimize="off" excludes="${excluded.packages.patterns}" nowarn="on">
+			<src path="${project.src.dir}" />
+		</javac>
+
+		<echo message="============ E X P O R T I N G   ${jar-file} J A R   N O W . . . . . . ============" />
+		<jar destfile="${project.dist.dir}/${jar-file}" excludes="build.xml">
+			<fileset dir="${project.classes.dir}" />
+		</jar>
+	</target>
+	<target name="clean">
+		<delete file="${project.dist.dir}/${jar-file}" />
+		<delete dir="${project.classes.dir}" />
+	</target>
+	<target name="init">
+		<mkdir dir="${project.classes.dir}" />
+	</target>
+</project>

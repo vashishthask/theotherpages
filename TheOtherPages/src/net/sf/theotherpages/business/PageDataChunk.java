@@ -3,6 +3,9 @@ package net.sf.theotherpages.business;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 /**
  * TODO A summary sentence containing a concise but complete description of the
  * API item
@@ -279,4 +282,12 @@ public class PageDataChunk {
 	public void setLastPageNumber(int lastPageNumber) {
 		this.lastPageNumber = lastPageNumber;
 	}
+
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this,
+				ToStringStyle.MULTI_LINE_STYLE);
+	
+	}
+	
+	
 }
