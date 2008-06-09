@@ -121,26 +121,26 @@ public class PageDataChunk {
 		if (currentPageNumber < 1) {
 			currentPageNumber = 1;
 		}
-		List resultDtoList = getResultList();
-		if (resultDtoList.size() == 0) {
-			return new ArrayList();
-		}
-		List returnList = new ArrayList();
-
-		int sizeOfPage = getPageSize();
-		if (sizeOfPage > resultDtoList.size()) {
-			sizeOfPage = resultDtoList.size();
-		}
-		int startIndex = (currentPageNumber - 1) * sizeOfPage
-				% (sizeOfPage * getNoOfPages());
-		int resulSize = resultDtoList.size();
-
-		if (startIndex > resulSize)
+		
+		if(currentPageNumber > lastPageNumber)
 			return null;
-		for (int i = 0; i < sizeOfPage; i++) {
-			returnList.add(i, resultDtoList.get(startIndex + i));
+		List returnList = new ArrayList();
+		
+		if (resultList.size() == 0) {
+			return returnList;
 		}
-
+		//Define how many items we'd like to take from resultDtoList
+		int startIndex = (currentPageNumber -startPageIndex) *  pageSize;
+		
+		int endIndex = startIndex + pageSize;
+		if(endIndex > resultList.size())
+			endIndex = resultList.size();
+		
+		System.out.println("Start index is=" + startIndex + " The endIndex is:"
+				+ endIndex);
+		for(int i=startIndex; i<endIndex;i++)
+			returnList.add(resultList.get(i));
+		System.out.println("The return list is:" + returnList);
 		return returnList;
 	}
 

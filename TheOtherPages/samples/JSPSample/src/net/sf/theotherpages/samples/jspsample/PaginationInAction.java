@@ -14,128 +14,90 @@ import net.sf.theotherpages.business.PageManager;
 import net.sf.theotherpages.business.PaginationCallback;
 import net.sf.theotherpages.cachestore.SessionAwareCacheStore;
 import net.sf.theotherpages.data.PageData;
-import net.sf.theotherpages.data.PaginationCallbackParams;
 import net.sf.theotherpages.samples.jspsample.util.ListOfData;
 import net.sf.theotherpages.service.PaginationService;
 import net.sf.theotherpages.service.PaginationServiceImpl;
 
-
 public class PaginationInAction extends HttpServlet {
-	private HttpServletRequest request;
 	private HttpSession session;
 	private PageManager pm;
-	private PaginationCallback pagingCallBack;
 	private String paginationId = PaginationCallBackImpl.class.getName();
-	private int currentPageNumber = 1;
-	private String gotoPageInd = "1";
-	private PaginationCallbackParams callbackParams = null;
 	private PaginationService paginationService = new PaginationServiceImpl(
 			new SessionAwareCacheStore(session));
 	private PageData pageData = null;
 
-	public void getSession(HttpServletRequest request) {
-
-		System.out.println("############## getSession ################");
-		
-		session = request.getSession();
-
-
-	}
-	
-	
-	 public void doGet(HttpServletRequest request, HttpServletResponse response)
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 
-		session =request.getSession();
+		session = request.getSession();
 		paginationService = new PaginationServiceImpl(
-					new SessionAwareCacheStore(session));
-/*		 String next = request.getParameter("next");
-		 String previous = request.getParameter("previous");
-		 String gotoPage = request.getParameter("gotoPage");*/
-		 String page = request.getParameter("page");
-		 //System.out.println("next :"+ next + "previous:" + previous +"gotoPage :"+gotoPage);
+				new SessionAwareCacheStore(session));
+		String page = request.getParameter("page");
 
-		 try {
-				 if("next".equals(page) ){				
-						getNextPage(request);
-					}else if("previous".equals(page)){
-						getPreviousPage(request);
-					}else if(page!=null){
-						goToPage(request);
-					}else{
-						showFirstPage(request);
-					}
-				 
-				 RequestDispatcher dispatcher = request.getRequestDispatcher(
-			        "WEB-INF/jsp/Pagination.jsp");
-			        dispatcher.include(request, response);          
-	 
-		 }catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		try {
+			if ("next".equals(page)) {
+				getNextPage(request);
+			} else if ("previous".equals(page)) {
+				getPreviousPage(request);
+			} else if (page != null) {
+				goToPage(request);
+			} else {
+				showFirstPage(request);
 			}
-		
+
+			RequestDispatcher dispatcher = request
+					.getRequestDispatcher("WEB-INF/jsp/Pagination.jsp");
+			dispatcher.include(request, response);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
-
-	public void showFirstPage(HttpServletRequest request) throws Exception {
-		getSession(request);
-		System.out.println("getFirstPage");
-		pageData = paginationService.getFirstPage(paginationId,null, new PaginationCallBackImpl(), null);
+	private void showFirstPage(HttpServletRequest request) throws Exception {
+		pageData = paginationService.getFirstPage(paginationId, null,
+				new PaginationCallBackImpl(), null);
 		request.setAttribute("pageData", pageData);
-		System.err.println("The datafetchparams are:"+session.getAttribute(paginationId)+"The pagination id is:"+paginationId);
-	
 	}
 
-	public void  getNextPage(HttpServletRequest request) throws Exception {
-		getSession(request);
-		System.err.println("The datafetchparams are:"+session.getAttribute(paginationId)+"The pagination id is:"+paginationId);
-		System.out.println("getNextPage");
+	private void getNextPage(HttpServletRequest request) throws Exception {
 		pageData = paginationService.getNextPage(paginationId);
 		request.setAttribute("pageData", pageData);
 
 	}
 
-	public void getPreviousPage(HttpServletRequest request) throws Exception {
-		getSession(request);
-		System.out.println("getPreviousPage");
+	private void getPreviousPage(HttpServletRequest request) throws Exception {
 		pageData = paginationService.getPreviousPage(paginationId);
 		request.setAttribute("pageData", pageData);
 
 	}
 
-	public void goToPage(HttpServletRequest request) throws Exception {
-		getSession(request);
-		System.out.println("goToPage");
-		int goToPageNumber = Integer.parseInt((String)(request.getParameter("page")));
+	private void goToPage(HttpServletRequest request) throws Exception {
+		int goToPageNumber = Integer.parseInt((String) (request
+				.getParameter("page")));
 		pageData = paginationService.goToPage(paginationId, goToPageNumber);
 		request.setAttribute("pageData", pageData);
 
 	}
 
-	public void goToLastPage(HttpServletRequest request) throws Exception {
-		getSession(request);
-		System.out.println("go to last page");
+	private void goToLastPage(HttpServletRequest request) throws Exception {
 		pageData = paginationService.goToLastPage(paginationId);
 		request.setAttribute("pageData", pageData);
 	}
 
 	class PaginationCallBackImpl implements PaginationCallback {
+		ListOfData listOfData = new ListOfData();
 
 		public List getPaginationData(Object queryParams, Object[] otherParams,
 				int startIndex, int endIndex) throws Exception {
-			ListOfData listOfData = new ListOfData();
 			return (List) listOfData.getListofData(queryParams, startIndex,
 					endIndex);
 		}
 
 		public long getRecordsCount(Object queryParams, Object[] otherParams)
 				throws Exception {
-
-			ListOfData listOfData = new ListOfData();
 			return (long) listOfData.getSize();
 		}
 
 	}
-
 }

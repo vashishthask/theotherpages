@@ -16,6 +16,7 @@ import javax.swing.JTable;
 import javax.swing.JToolBar;
 
 import net.sf.theotherpages.data.PageData;
+import net.sf.theotherpages.samples.swingsample.ui.action.PaginationInAction;
 
 
 
@@ -29,7 +30,7 @@ public class MyPanel extends JPanel{
 	//Create the toolbar.
     JToolBar toolBar = new JToolBar();
 	MyTableModel tableModel  = new MyTableModel();
-	JButton next = new JButton(new ImageIcon("images/right.gif"));
+	JButton next = new JButton(new ImageIcon("samples/SwingSample/images/right.gif"));
 	JButton prev =new JButton(new ImageIcon("images/left.gif"));
 	JLabel gotoPageLable = new JLabel(" goto ");
 	JComboBox gotoPageList= new JComboBox();
@@ -114,7 +115,7 @@ public class MyPanel extends JPanel{
 			pageData = action.getFirstPage();
 			int lastPage=pageData.getLastPageNo();
 			for(int x=1; x<=lastPage;x++){
-				gotoPageList.addItem(x);
+				gotoPageList.addItem(new Integer(x));
 				
 			}
     		}else if(pageType.equals(NEXT_PAGE)){

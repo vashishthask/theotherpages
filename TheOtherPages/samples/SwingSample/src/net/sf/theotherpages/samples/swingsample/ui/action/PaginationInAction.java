@@ -33,8 +33,8 @@ public class PaginationInAction{
 	public PageData getFirstPage() throws Exception {
 		init();
 		System.out.println("getFirstPage");
-		pageData = paginationService.getFirstPage(paginationId, null, null,
-				new PaginationCallBackImpl());
+		pageData = paginationService.getFirstPage(paginationId, null, 
+				new PaginationCallBackImpl(), null);
 		
 		return pageData;
 	}

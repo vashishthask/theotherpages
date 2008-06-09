@@ -192,6 +192,10 @@ public class CachedPageDataAccessor implements PageDataAccessor {
 			return new PageData(pageNumber, records, pageDataChunk
 					.getNoOfPages(), pageDataChunk.getLastPageNumber());
 		} else {
+			System.out.println("The startIndex is:"
+					+ PaginationUtil.getStartIndex(pageNumber, pageConfig)
+					+ " The end index is:"
+					+ PaginationUtil.getEndIndex(pageNumber, pageConfig));
 			PageDataChunk newCahe = getPageDataChunkFromDataBase(paginationId,
 					PaginationUtil.getStartIndex(pageNumber, pageConfig),
 					PaginationUtil.getEndIndex(pageNumber, pageConfig),
@@ -234,6 +238,7 @@ public class CachedPageDataAccessor implements PageDataAccessor {
 		}
 		
 		PaginationCallback pagingCallBack = dataFetchParams.getCallback();
+		System.out.println("The callback is:" + pagingCallBack);
 		List resultList = pagingCallBack.getPaginationData(queryParam, otherParams, startIndex,
 				endIndex + 1);
 		long numberOfRecords = pagingCallBack.getRecordsCount(queryParam, otherParams);

@@ -10,7 +10,8 @@
 	<property name="build.dir" value=".classes" />
 	<property name="weblib.dir" value="${war.dir}/WEB-INF/lib" />
 	<property name="dist.dir" value="dist" />
-
+	<property name="tomcat.home" value="c:/apache-tomcat-5.5.23" />
+	<property name="tomcat.deploy.dir" value="${tomcat.home}/webapps" />
 	<property name="theotherpages.root" value="../.." />
 
 
@@ -24,8 +25,8 @@
 			<include name="standard.jar" />
 		</fileset>
 		<fileset dir="${theotherpages.root}/dist">
-					<include name="theotherpages.jar" />
-				</fileset>
+			<include name="theotherpages.jar" />
+		</fileset>
 	</path>
 
 
@@ -107,7 +108,6 @@
 			<include name="WEB-INF/*.*" />
 			<include name="WEB-INF/lib/**" />
 			<include name="WEB-INF/jsp/**" />
-			<include name="WEB-INF/classes/**" />
 			<exclude name="WEB-INF/web.xml" />
 			<exclude name="**/.*" />
 		</war>
@@ -115,6 +115,25 @@
 	</target>
 
 
-	<target name="all" depends="clean,build,warfile" description="Clean,build,warfile" />
+	<target name="all" depends="clean,build,warfile,deployWarInTomcat" description="Clean,build,warfile" />
+
+	<target name="deployWarInTomcat" depends="warfile" description="Build the web application archive">
+		<mkdir dir="${dist.dir}" />
+
+		<war warfile="${dist.dir}/${name}.war" basedir="${war.dir}" webxml="${war.dir}/WEB-INF/web.xml">
+			<include name="*" />
+			<include name="images/**" />
+			<include name="WEB-INF/*.*" />
+			<include name="WEB-INF/lib/**" />
+			<include name="WEB-INF/jsp/**" />
+			<exclude name="WEB-INF/web.xml" />
+			<exclude name="**/.*" />
+		</war>
+		<copy todir="${tomcat.deploy.dir}" preservelastmodified="true">
+			<fileset dir="${dist.dir}">
+				<include name="${name}.war" />
+			</fileset>
+		</copy>
+	</target>
 
 </project>

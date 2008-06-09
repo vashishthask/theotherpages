@@ -43,14 +43,14 @@ public class PaginationUtil {
 	 * 
 	 * @param pageNumber
 	 *            the page number of the requested page
-	 * @param paginationBean
+	 * @param pageConfig
 	 * @return the start index for the the database call
 	 */
-	public static int getStartIndex(int pageNumber, PageConfig paginationBean) {
+	public static int getStartIndex(int pageNumber, PageConfig pageConfig) {
 
-		int k = pageNumber / (paginationBean.getNumPagesInCache() + 1);
-		int startIndex = k * paginationBean.getNumPagesInCache()
-				* paginationBean.getPageSize();
+		int k = pageNumber / (pageConfig.getNumPagesInCache() + 1);
+		int startIndex = k * pageConfig.getNumPagesInCache()
+				* pageConfig.getPageSize();
 		return startIndex;
 	}
 
@@ -71,12 +71,12 @@ public class PaginationUtil {
 	 * 
 	 * @param startIndex
 	 *            the start index of the request
-	 * @param paginationBean
+	 * @param pageConfig
 	 * @return the starting page number
 	 */
 	public static int getStartPageNumber(int startIndex,
-			PageConfig paginationBean) {
-		return (startIndex / paginationBean.getPageSize()) + 1;
+			PageConfig pageConfig) {
+		return (startIndex / pageConfig.getPageSize()) + 1;
 	}
 
 }
