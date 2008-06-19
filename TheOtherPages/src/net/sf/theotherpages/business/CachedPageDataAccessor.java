@@ -190,7 +190,7 @@ public class CachedPageDataAccessor implements PageDataAccessor {
 		if (isPageInCache(pageNumber, pageDataChunk)) {
 			List records = pageDataChunk.goToPage(pageNumber);
 			return new PageData(pageNumber, records, pageDataChunk
-					.getNoOfPages(), pageDataChunk.getLastPageNumber());
+					.getTotalNumRows(), pageDataChunk.getLastPageNumber());
 		} else {
 			System.out.println("The startIndex is:"
 					+ PaginationUtil.getStartIndex(pageNumber, pageConfig)
@@ -201,7 +201,7 @@ public class CachedPageDataAccessor implements PageDataAccessor {
 					PaginationUtil.getEndIndex(pageNumber, pageConfig),
 					pageConfig, cacheStore);
 			List records = newCahe.goToPage(pageNumber);
-			return new PageData(pageNumber, records, newCahe.getNoOfPages(),
+			return new PageData(pageNumber, records, newCahe.getTotalNumRows(),
 					newCahe.getLastPageNumber());
 		}
 
