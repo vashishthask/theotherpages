@@ -17,7 +17,7 @@
 
 	<path id="master-classpath">
 		<fileset dir="${theotherpages.root}/lib">
-			<include name="commons-lang-2.0.jar" />
+			<include name="commons-lang-2.3.jar" />
 			<include name="commons-logging-1.1.jar" />
 			<include name="jstl.jar" />
 			<include name="log4j-1.2.13.jar" />
@@ -77,7 +77,7 @@
 
 		<copy todir="${weblib.dir}" preservelastmodified="true">
 			<fileset dir="${theotherpages.root}/lib">
-				<include name="commons-lang-2.0.jar" />
+				<include name="commons-lang-2.3.jar" />
 				<include name="commons-logging-1.1.jar" />
 				<include name="jstl.jar" />
 				<include name="log4j-1.2.13.jar" />
