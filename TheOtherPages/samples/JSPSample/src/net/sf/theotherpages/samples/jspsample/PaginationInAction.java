@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import net.sf.theotherpages.business.PageManager;
+import net.sf.theotherpages.PaginationConstants;
 import net.sf.theotherpages.business.PaginationCallback;
 import net.sf.theotherpages.cachestore.SessionAwareCacheStore;
 import net.sf.theotherpages.samples.jspsample.util.ListOfData;
@@ -18,14 +18,14 @@ import net.sf.theotherpages.service.PaginationServiceImpl;
 import net.sf.theotherpages.util.PaginationServiceHttpUtil;
 
 public class PaginationInAction extends HttpServlet {
+	private static final String REQUEST_PARAM_PAGE = "page";
 	private HttpSession session;
-	private PageManager pm;
 	private String paginationId = PaginationCallBackImpl.class.getName();
 	private PaginationService paginationService = new PaginationServiceImpl(
 			new SessionAwareCacheStore(session));
 
 	private PaginationServiceHttpUtil httpUtil;
-	private static final String PAGE_TO_FORWARD = "/example-pse.jsp";
+	private static final String PAGE_TO_FORWARD = "/WEB-INF/jsp/Pagination.jsp";
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
@@ -35,15 +35,15 @@ public class PaginationInAction extends HttpServlet {
 				new SessionAwareCacheStore(session));
 		httpUtil = new PaginationServiceHttpUtil(paginationService);
 		httpUtil.setRequest(request);
-		String page = request.getParameter("page");
+		String page = request.getParameter(REQUEST_PARAM_PAGE);
 
 		try {
-			if ("next".equals(page)) {
+			if (PaginationConstants.NEXTPAGE_IND.equals(page)) {
 				getNextPage(request);
-			} else if ("previous".equals(page)) {
+			} else if (PaginationConstants.PREVIOUSPAGE_IND.equals(page)) {
 				getPreviousPage(request);
 			} else if (page != null) {
-				goToPage(request);
+				goToPage(page);
 			} else {
 				showFirstPage(request);
 			}
@@ -69,9 +69,8 @@ public class PaginationInAction extends HttpServlet {
 		httpUtil.getPreviousPage(paginationId);
 	}
 
-	private void goToPage(HttpServletRequest request) throws Exception {
-		int goToPageNumber = Integer.parseInt((String) (request
-				.getParameter("page")));
+	private void goToPage(String pageNumber) throws Exception {
+		int goToPageNumber = Integer.parseInt(pageNumber);
 		httpUtil.goToPage(paginationId, goToPageNumber);
 	}
 
