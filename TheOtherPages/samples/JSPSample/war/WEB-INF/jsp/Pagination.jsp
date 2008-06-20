@@ -16,7 +16,7 @@
 	<tr>
 	<c:if test="${!pageData.firstPage}">
 	    <td>
-	    <a href="PaginationInAction?page=previous" onclick="this.form.submit();"><</a>
+	    <a href="PaginationInAction?page=p" onclick="this.form.submit();"><</a>
 	    </td>
 	</c:if>
 	
@@ -33,7 +33,7 @@
 	
 	<c:if test="${!pageData.lastPage}">
 		<td>
-		<a href="PaginationInAction?page=next" onclick="this.form.submit();">></a>
+		<a href="PaginationInAction?page=n" onclick="this.form.submit();">></a>
 		</td>
     </c:if>
     <td> 
