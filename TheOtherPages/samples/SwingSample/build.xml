@@ -2,7 +2,7 @@
 	<target name="all" depends="clean,init,compile,war" />
 	<path id="project.class.path">
 		<fileset dir="${basedir}/WebContent/WEB-INF/lib">
-			<include name="commons-lang-2.0.jar"/>
+			<include name="commons-lang-2.3.jar"/>
 			<include name="commons-logging-1.1.jar"/>
 			<include name="freemarker-2.3.8.jar"/>
 			<include name="jstl.jar"/>
