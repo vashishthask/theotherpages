@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import net.sf.theotherpages.business.PageManager;
 import net.sf.theotherpages.business.PaginationCallback;
 import net.sf.theotherpages.cachestore.SessionAwareCacheStore;
 import net.sf.theotherpages.samples.disptagint.service.ReportService;
@@ -22,7 +21,6 @@ import org.displaytag.util.ParamEncoder;
 
 public class PaginationInAction extends HttpServlet {
 	private HttpSession session;
-	private PageManager pm;
 	private String paginationId = PaginationCallBackImpl.class.getName();
 	private PaginationService paginationService = new PaginationServiceImpl(
 			new SessionAwareCacheStore(session));
@@ -39,16 +37,11 @@ public class PaginationInAction extends HttpServlet {
 				new SessionAwareCacheStore(session));
 		httpUtil = new PaginationServiceHttpUtil(paginationService);
 		httpUtil.setRequest(request);
-		String page = request.getParameter("page");
 		String pageParam = new ParamEncoder(TABLE_ID).encodeParameterName(TableTagParameters.PARAMETER_PAGE);
 		String pageNumber = request.getParameter(pageParam);
 
 		try {
-			if ("next".equals(page)) {
-				getNextPage(request);
-			} else if ("previous".equals(page)) {
-				getPreviousPage(request);
-			} else if (pageNumber != null) {
+			if (pageNumber != null) {
 				goToPage(pageNumber);
 			} else {
 				showFirstPage(request);
@@ -67,21 +60,9 @@ public class PaginationInAction extends HttpServlet {
 				null);
 	}
 
-	private void getNextPage(HttpServletRequest request) throws Exception {
-		httpUtil.getNextPage(paginationId);
-	}
-
-	private void getPreviousPage(HttpServletRequest request) throws Exception {
-		httpUtil.getPreviousPage(paginationId);
-	}
-
 	private void goToPage(String pageNumber) throws Exception {
 		int goToPageNumber = Integer.parseInt(pageNumber);
 		httpUtil.goToPage(paginationId, goToPageNumber);
-	}
-
-	private void goToLastPage(HttpServletRequest request) throws Exception {
-		httpUtil.goToLastPage(paginationId);
 	}
 
 	class PaginationCallBackImpl implements PaginationCallback {
