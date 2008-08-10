@@ -43,7 +43,7 @@ public class PageManager {
 		if (cacheStore != null)
 			this.cacheStore = cacheStore;
 		else
-			new PageManager();
+			this.cacheStore = new AppLevelCacheStore();
 	}
 
 	/**
