@@ -26,15 +26,15 @@ public class PaginationInAction{
 	public void init() {
 
 		paginationService = new PaginationServiceImpl(
-				new AppLevelCacheStore());
+				new AppLevelCacheStore(), paginationId, null, 
+				new PaginationCallBackImpl(), null);
 
 	}
 
 	public PageData getFirstPage() throws Exception {
 		init();
 		System.out.println("getFirstPage");
-		pageData = paginationService.getFirstPage(paginationId, null, 
-				new PaginationCallBackImpl(), null);
+		pageData = paginationService.getFirstPage();
 		
 		return pageData;
 	}
@@ -42,14 +42,14 @@ public class PaginationInAction{
 	public PageData getNextPage() throws Exception {
 		init();		
 		System.out.println("getNextPage");
-		pageData = paginationService.getNextPage(paginationId);
+		pageData = paginationService.getNextPage();
 		return pageData;
 	}
 
 	public PageData getPreviousPage() throws Exception {
 		init();
 		System.out.println("getPreviousPage");
-		pageData = paginationService.getPreviousPage(paginationId);
+		pageData = paginationService.getPreviousPage();
 
 		return pageData;
 	}
@@ -57,7 +57,7 @@ public class PaginationInAction{
 	public PageData goToPage(int goToPageNumber) throws Exception {
 		init();
 		System.out.println("goToPage");
-		pageData = paginationService.goToPage(paginationId, goToPageNumber);
+		pageData = paginationService.goToPage(goToPageNumber);
 
 		return pageData;
 	}
@@ -65,7 +65,7 @@ public class PaginationInAction{
 	public PageData goToLastPage() throws Exception {
 		init();
 		System.out.println("go to last page");
-		pageData = paginationService.goToLastPage(paginationId);
+		pageData = paginationService.goToLastPage();
 		return pageData;
 	}
 
