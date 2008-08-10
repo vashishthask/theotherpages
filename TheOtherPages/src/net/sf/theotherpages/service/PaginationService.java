@@ -1,8 +1,6 @@
 package net.sf.theotherpages.service;
 
-import net.sf.theotherpages.business.PaginationCallback;
 import net.sf.theotherpages.data.PageData;
-import net.sf.theotherpages.data.PaginationCallbackParams;
 
 /**
  * TODO A summary sentence containing a concise but complete description of the
@@ -45,9 +43,7 @@ public interface PaginationService {
 	 * @throws Exception
 	 * 
 	 */
-	public PageData getFirstPage(String paginationId, PaginationCallbackParams callbackParams,
-			PaginationCallback pagingCallBack,
-			String prefix) throws Exception;
+	public PageData getFirstPage() throws Exception;
 
 	/**
 	 * TODO Mention the description of method over here
@@ -61,7 +57,7 @@ public interface PaginationService {
 	 * @return <code>PageData</code> TODO description
 	 * @throws Exception
 	 */
-	PageData getNextPage(String paginationId) throws Exception;
+	PageData getNextPage() throws Exception;
 
 	/**
 	 * TODO Mention the description of method over here
@@ -74,7 +70,7 @@ public interface PaginationService {
 	 * @return <code>PageData</code> TODO description
 	 * @throws Exception 
 	 */
-	PageData getPreviousPage(String paginationId) throws Exception;
+	PageData getPreviousPage() throws Exception;
 
 	/**
 	 * TODO Mention the description of method over here
@@ -89,7 +85,7 @@ public interface PaginationService {
 	 * @throws Exception 
 	 * 
 	 */
-	PageData goToPage(String paginationId, int goToPageNumber) throws Exception;
+	PageData goToPage(int goToPageNumber) throws Exception;
 
 	/**
 	 * TODO Mention the description of method over here
@@ -102,6 +98,6 @@ public interface PaginationService {
 	 * @return <code>PageData</code> TODO description
 	 * @throws Exception 
 	 */
-	PageData goToLastPage(String paginationId) throws Exception;
+	PageData goToLastPage() throws Exception;
 
 }
