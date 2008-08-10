@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
+import net.sf.theotherpages.PaginationConstants;
+
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -46,6 +48,32 @@ import org.apache.commons.lang.StringUtils;
  */
 public class Configuration {
 
+	private static final String CACHE_INDICATOR = "cache.indicator";
+
+	private static final String NUM_PAGES = "numPages";
+
+	private static final String PAGE_SIZE = "page.size";
+
+	public static final String CURRENT_PAGE_NUMBER = "currentPageNumber";
+
+	public static final String SORT_STR = "sortStr";
+
+	public static final String TRUE = "true";
+
+	public static final String PAGESIZE = "pagesize";
+
+	public static final String DEFAULT_PREFIX = "default";
+
+	private static final String DOT = ".";
+
+	/**
+	 * map to cache data from properties file
+	 */
+	private static Map pageConfigMap = new HashMap();
+
+	/** ********************************************************** */
+
+	// Context
 	/**
 	 * JNDI is a constant
 	 */
@@ -262,9 +290,44 @@ public class Configuration {
 	public static void reload() {
 		config = new Configuration();
 	}
-	
-	protected String[] getProperties(final String aKey) {
-		String prop = rbdle.getString(aKey);
-		return prop.split(",");
+
+	private PageConfig createPageConfig(String prefix) {
+		PageConfig bean = new PageConfig();
+		String pageSizeStr = config.getProperty(new StringBuffer(20).append(
+				prefix).append(DOT).append(PAGE_SIZE).toString());
+		int pageSize = 0;
+		if (StringUtils.isNotBlank(pageSizeStr))
+			pageSize = Integer.valueOf(pageSizeStr).intValue();
+		bean.setPageSize(pageSize);
+		String numPageStr = config.getProperty(new StringBuffer(20).append(
+				prefix).append(DOT).append(NUM_PAGES).toString());
+		int numPages = 0;
+		if (StringUtils.isNotBlank(numPageStr))
+			numPages = Integer.valueOf(numPageStr).intValue();
+		bean.setNumPagesInCache(numPages);
+		String cacheIndStr = config.getProperty(new StringBuffer(prefix)
+				.append(DOT).append(CACHE_INDICATOR).toString());
+		boolean cacheInd = false;
+		if (StringUtils.isNotBlank(cacheIndStr))
+			cacheInd = Boolean.valueOf(cacheIndStr).booleanValue();
+		bean.setPageCacheInd(cacheInd);
+		pageConfigMap.put(prefix, bean);
+		return bean;
+	}
+
+	/**
+	 * This mthod is used to read the config file and store the values
+	 * 
+	 * @param prefix
+	 *            the string whicgh is used as prefix to lookup the properties
+	 * @return PageConfig
+	 */
+	public PageConfig getPageConfigInfo(String prefix) {
+		if (prefix == null)
+			prefix = PaginationConstants.DEFAULT_PREFIX;
+		if (pageConfigMap.containsKey(prefix))
+			return (PageConfig) pageConfigMap.get(prefix);
+		return createPageConfig(prefix);
+
 	}
 }
