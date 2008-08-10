@@ -35,21 +35,30 @@ import net.sf.theotherpages.data.PaginationCallbackParams;
 public class PaginationServiceImpl implements PaginationService {
 
 	PaginationCacheStore cacheStore;
+	String paginationId;
+	PaginationCallbackParams callbackParams;
+	PaginationCallback pagingCallBack; 
+	String prefix;	
 
 	/**
 	 * Creates a PaginationServiceImpl with <code>cacheStore</code> param.
 	 * @param cacheStore
+	 * @param paginationId
+	 * @param callbackParams 
+	 * @param pagingCallBack 
+	 * @param prefix 
 	 * 
 	 */
-	public PaginationServiceImpl(PaginationCacheStore cacheStore) {
+	public PaginationServiceImpl(PaginationCacheStore cacheStore, String paginationId,
+			PaginationCallbackParams callbackParams,
+			PaginationCallback pagingCallBack, String prefix) {
 		this.cacheStore = cacheStore;
+		this.paginationId = paginationId;
+		this.callbackParams = callbackParams;
+		this.pagingCallBack = pagingCallBack;
+		this.prefix = prefix;
 	}
 
-	/**
-	 * Creates a default <code>PaginationServiceImpl</code> instance.
-	 */
-	public PaginationServiceImpl() {
-	}
 
 	/**
 	 * TODO Mention the description of method over here
@@ -62,9 +71,7 @@ public class PaginationServiceImpl implements PaginationService {
 	 *      net.sf.theotherpages.data.PaginationCallbackParams,
 	 *      net.sf.theotherpages.business.PaginationCallback, java.lang.String)
 	 */
-	public PageData getFirstPage(String paginationId,
-			PaginationCallbackParams callbackParams,
-			PaginationCallback pagingCallBack, String prefix) throws Exception {
+	public PageData getFirstPage() throws Exception {
 		PageManager pageManager = new PageManager(cacheStore);
 		return pageManager.getPageData(paginationId, 0,
 				PaginationConstants.FISTPAGE_IND, callbackParams,
@@ -80,7 +87,7 @@ public class PaginationServiceImpl implements PaginationService {
 	 * 
 	 * @see net.sf.theotherpages.service.PaginationService#getNextPage(java.lang.String)
 	 */
-	public PageData getNextPage(String paginationId) throws Exception {
+	public PageData getNextPage() throws Exception {
 		PageManager pageManager = new PageManager(cacheStore);
 		DataFetchParams dataFetchParams = (DataFetchParams) cacheStore
 				.get(paginationId);
@@ -98,7 +105,7 @@ public class PaginationServiceImpl implements PaginationService {
 	 * 
 	 * @see net.sf.theotherpages.service.PaginationService#getPreviousPage(java.lang.String )
 	 */
-	public PageData getPreviousPage(String paginationId) throws Exception {
+	public PageData getPreviousPage() throws Exception {
 		PageManager pageManager = new PageManager(cacheStore);
 		DataFetchParams dataFetchParams = (DataFetchParams) cacheStore
 				.get(paginationId);
@@ -116,10 +123,12 @@ public class PaginationServiceImpl implements PaginationService {
 	 * 
 	 * @see net.sf.theotherpages.service.PaginationService#goToLastPage(java.lang.String)
 	 */
-	public PageData goToLastPage(String paginationId) throws Exception {
+	public PageData goToLastPage() throws Exception {
 		PageManager pageManager = new PageManager(cacheStore);
 		DataFetchParams dataFetchParams = (DataFetchParams) cacheStore
 				.get(paginationId);
+		if(dataFetchParams == null)
+			return getFirstPage();
 		int currentPageNum = dataFetchParams.getCurrentPageNumber();
 		int lastPageNum = dataFetchParams.getLastPageNumber();
 
@@ -137,32 +146,15 @@ public class PaginationServiceImpl implements PaginationService {
 	 * @see net.sf.theotherpages.service.PaginationService#goToPage(java.lang.String,
 	 *      int)
 	 */
-	public PageData goToPage(String paginationId, int goToPageNumber)
+	public PageData goToPage(int goToPageNumber)
 			throws Exception {
 		PageManager pageManager = new PageManager(cacheStore);
 		DataFetchParams dataFetchParams = (DataFetchParams) cacheStore
 				.get(paginationId);
+		if(dataFetchParams == null)
+			throw new IllegalStateException("Illegal state of cachestore. Please ");
 		int currentPageNum = dataFetchParams.getCurrentPageNumber();
 		return pageManager.getPageData(paginationId, currentPageNum, String
 				.valueOf(goToPageNumber), null, null);
-	}
-
-	/**
-	 * Returns the cacheStore
-	 * 
-	 * @return PaginationCacheStore
-	 */
-	public PaginationCacheStore getCacheStore() {
-		return cacheStore;
-	}
-
-	/**
-	 * Sets the cacheStore
-	 * 
-	 * @param cacheStore
-	 *            The cacheStore to set.
-	 */
-	public void setCacheStore(PaginationCacheStore cacheStore) {
-		this.cacheStore = cacheStore;
 	}
 }
