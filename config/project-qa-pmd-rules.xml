@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+<ruleset name="VergelijkQuality">
+  <description>
+  </description>
+  <rule ref="rulesets/imports.xml/UnusedImports" />
+  <rule ref="rulesets/basic.xml/EmptyCatchBlock" />
+  <rule ref="rulesets/basic.xml/EmptyIfStmt" />
+  <rule ref="rulesets/basic.xml/UnnecessaryConversionTemporary" />
+  <rule ref="rulesets/basic.xml/OverrideBothEqualsAndHashcode" />
+  <rule ref="rulesets/basic.xml/DoubleCheckedLocking" />
+  <rule ref="rulesets/basic.xml/ReturnFromFinallyBlock" />
+  <rule ref="rulesets/basic.xml/BooleanInstantiation" />
+  <rule ref="rulesets/basic.xml/ClassCastExceptionWithToArray" />
+  <rule ref="rulesets/basic.xml/UselessOperationOnImmutable" />
+  <rule ref="rulesets/design.xml/CloseResource" />
+  <!--
+  <rule ref="rulesets/logging-java.xml/SystemPrintln" />
+  -->
+  <rule ref="rulesets/controversial.xml/DontImportSun" />
+  <rule ref="rulesets/unusedcode.xml/UnusedPrivateMethod" />
+  <rule ref="rulesets/unusedcode.xml/UnusedLocalVariable" />
+  <!-- rule ref="rulesets/strings.xml/UseEqualsToCompareStrings" />
+  <rule ref="rulesets/strings.xml/AvoidStringBufferField" /-->
+  <rule ref="rulesets/naming.xml/MethodNamingConventions" />
+  <rule ref="rulesets/naming.xml/ClassNamingConventions" />
+</ruleset>
