@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+
+<project name="jspsample" basedir="." default="usage">
+
+	<property name="name" value="jspsample" />
+
+	<property name="war.dir" value="war" />
+	<property name="src.dir" value="src" />
+	<property name="client.dir" value="client" />
+	<property name="build.dir" value=".classes" />
+	<property name="weblib.dir" value="${war.dir}/WEB-INF/lib" />
+	<property name="dist.dir" value="dist" />
+	<property name="tomcat.home" value="c:/apache-tomcat-5.5.23" />
+	<property name="tomcat.deploy.dir" value="${tomcat.home}/webapps" />
+	<property name="theotherpages.root" value="../.." />
+
+
+	<path id="master-classpath">
+		<fileset dir="${theotherpages.root}/lib">
+			<include name="commons-lang-2.3.jar" />
+			<include name="commons-logging-1.1.jar" />
+			<include name="jstl.jar" />
+			<include name="log4j-1.2.13.jar" />
+			<include name="servlet-api.jar" />
+			<include name="standard.jar" />
+		</fileset>
+		<fileset dir="${theotherpages.root}/dist">
+			<include name="theotherpages.jar" />
+		</fileset>
+	</path>
+
+
+	<target name="usage">
+
+		<echo message="" />
+		<echo message="Spring JPetStore build file" />
+		<echo message="------------------------------------------------------" />
+		<echo message="" />
+		<echo message="Available targets are:" />
+		<echo message="" />
+		<echo message="clean    --> Clean output dirs" />
+		<echo message="build    --> Compile main Java sources and copy libraries" />
+		<echo message="warfile  --> Build the web application archive" />
+		<echo message="all      --> Clean, build, warfile" />
+		<echo message="" />
+
+	</target>
+
+
+	<target name="clean" description="Clean output dirs (build, weblib, dist)">
+
+		<delete dir="${build.dir}" />
+		<delete dir="${weblib.dir}" />
+		<delete dir="${dist.dir}" />
+	</target>
+
+
+	<target name="build" description="Compile main source tree java files into class files, generate jar files">
+
+		<mkdir dir="${build.dir}" />
+
+		<javac destdir="${build.dir}" source="1.4" target="1.4" debug="true" deprecation="false" optimize="false" failonerror="true">
+			<src path="${src.dir}" />
+			<classpath refid="master-classpath" />
+		</javac>
+
+		<copy todir="${build.dir}" preservelastmodified="true">
+			<fileset dir="${src.dir}">
+				<include name="**/*.xml" />
+				<include name="**/*.properties" />
+			</fileset>
+		</copy>
+
+		<mkdir dir="${weblib.dir}" />
+
+		<jar jarfile="${weblib.dir}/${name}.jar" compress="true" basedir="${build.dir}" />
+
+		<copy todir="${weblib.dir}" preservelastmodified="true">
+			<fileset dir="${theotherpages.root}/lib">
+				<include name="commons-lang-2.3.jar" />
+				<include name="commons-logging-1.1.jar" />
+				<include name="jstl.jar" />
+				<include name="log4j-1.2.13.jar" />
+				<include name="standard.jar" />
+			</fileset>
+			<fileset dir="${theotherpages.root}/dist">
+				<include name="theotherpages.jar" />
+			</fileset>
+		</copy>
+	</target>
+
+
+	<target name="dist" depends="warfile">
+		<!-- 
+			Delegate to warfile target by depending on it. dist is just to offer
+			a generic target name across all Spring sample apps that may be used
+			for autobuilds testing.
+		-->
+	</target>
+
+
+	<target name="warfile" depends="build" description="Build the web application archive">
+		<mkdir dir="${dist.dir}" />
+
+		<war warfile="${dist.dir}/${name}.war" basedir="${war.dir}" webxml="${war.dir}/WEB-INF/web.xml">
+			<include name="*" />
+			<include name="images/**" />
+			<include name="WEB-INF/*.*" />
+			<include name="WEB-INF/lib/**" />
+			<include name="WEB-INF/jsp/**" />
+			<exclude name="WEB-INF/web.xml" />
+			<exclude name="**/.*" />
+		</war>
+
+	</target>
+
+
+	<target name="all" depends="clean,build,warfile,deployWarInTomcat" description="Clean,build,warfile" />
+
+	<target name="deployWarInTomcat" depends="warfile" description="Build the web application archive">
+		<mkdir dir="${dist.dir}" />
+
+		<war warfile="${dist.dir}/${name}.war" basedir="${war.dir}" webxml="${war.dir}/WEB-INF/web.xml">
+			<include name="*" />
+			<include name="images/**" />
+			<include name="WEB-INF/*.*" />
+			<include name="WEB-INF/lib/**" />
+			<include name="WEB-INF/jsp/**" />
+			<exclude name="WEB-INF/web.xml" />
+			<exclude name="**/.*" />
+		</war>
+		<copy todir="${tomcat.deploy.dir}" preservelastmodified="true">
+			<fileset dir="${dist.dir}">
+				<include name="${name}.war" />
+			</fileset>
+		</copy>
+	</target>
+
+</project>

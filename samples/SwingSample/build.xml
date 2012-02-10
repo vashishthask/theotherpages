@@ -1,0 +1,57 @@
+<project name="pagination" default="all" basedir=".">
+	<target name="all" depends="clean,init,compile,war" />
+	<path id="project.class.path">
+		<fileset dir="${basedir}/WebContent/WEB-INF/lib">
+			<include name="commons-lang-2.3.jar"/>
+			<include name="commons-logging-1.1.jar"/>
+			<include name="freemarker-2.3.8.jar"/>
+			<include name="jstl.jar"/>
+			<include name="junit.jar"/>
+			<include name="log4j-1.2.13.jar"/>
+			<include name="servlet-api.jar"/>
+			<include name="standard.jar"/>
+			<include name="tcs-utilities.jar"/>
+		</fileset>
+	</path>
+	<target name="clean">
+		<delete dir="${basedir}/WebContent/WEB-INF/classes"/>
+		<delete dir="${basedir}/dist"/>
+	</target>
+
+	<target name="init">
+		<mkdir dir="${basedir}/WebContent/WEB-INF/classes"/>
+		<mkdir dir="${basedir}/dist"/>
+	</target>
+
+	<target name="compile">
+		<javac destdir="${basedir}/WebContent/WEB-INF/classes" classpathref="project.class.path">
+			<src path="${basedir}/src" />
+		</javac>
+	</target>
+
+	<target name="war">
+		<jar destfile="${basedir}/dist/pagination.war">
+			<zipfileset dir="${basedir}/WebContent/WEB-INF" prefix="WEB-INF">
+				<include name="*.xml"/>
+			</zipfileset>
+			<zipfileset  dir="${basedir}/WebContent/WEB-INF/jsp" prefix="WEB-INF/jsp"/>
+			<zipfileset dir="${basedir}/WebContent" prefix="">
+				<include name="*.*"/>
+			</zipfileset>
+			<zipfileset dir="${basedir}/WebContent/WEB-INF/classes" prefix="WEB-INF/classes">
+				<include name="**/*.*"/>
+			</zipfileset>
+
+			<zipfileset dir="${basedir}/WebContent/WEB-INF/lib" prefix="WEB-INF/lib">
+				<include name="*.jar"/>
+			</zipfileset>
+
+			<zipfileset dir="${basedir}/config" prefix="WEB-INF/classes">
+				<include name="pagination.properties"/>
+			</zipfileset>
+			
+
+		</jar>
+	</target>
+
+</project>
